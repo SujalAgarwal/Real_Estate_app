@@ -1,11 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { useDispatch,useSelector } from "react-redux";
+import { signInFaliure,signInStart,signInSuccess } from "../redux/user/userSlice";
 export default function SignIn() {
   const [formdata, setformdata] = useState({});
-  const [error, seterror] = useState(null);
-  const [loading, setloading] = useState(null);
+  const {error,loading}=useSelector((state)=>state.user)
+  const dispatch=useDispatch();
   const navigate = useNavigate();
   const handlechange = (e) => {
     setformdata({
@@ -15,9 +16,9 @@ export default function SignIn() {
   };
   const handlesubmit = async (e) => {
     e.preventDefault();
-    seterror(null);
+
     try {
-      setloading(true);
+      dispatch(signInStart())
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -27,18 +28,16 @@ export default function SignIn() {
       });
       const data = await res.json();
       if (data.success === false) {
-        setloading(false);
-        seterror(data.message);
+       dispatch(signInFaliure(data.message))
         return;
       }
-      setloading(false);
+      dispatch(signInSuccess(data))
       navigate("/");
     } catch (e) {
-      setloading(false);
-      seterror(e.message);
+       dispatch(e.message)
     }
   };
-  console.log(error);
+
   return (
     <div className="p-3 max-w-xl mx-auto">
       <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
