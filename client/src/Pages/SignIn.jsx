@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch,useSelector } from "react-redux";
 import { signInFaliure,signInStart,signInSuccess } from "../redux/user/userSlice";
+import OAuth from "../Components/OAuth";
 export default function SignIn() {
   const [formdata, setformdata] = useState({});
   const {error,loading}=useSelector((state)=>state.user)
@@ -42,7 +43,6 @@ export default function SignIn() {
     <div className="p-3 max-w-xl mx-auto">
       <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
       <form className="flex flex-col gap-4" onSubmit={handlesubmit}>
-       
         <input
           type="email"
           placeholder="email"
@@ -58,10 +58,10 @@ export default function SignIn() {
           onChange={handlechange}
         />
         <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
-          {loading ? "Loading.." : "Sign Up"}
+          {loading ? "Loading.." : "Sign In"}
         </button>
+        <OAuth/>
       </form>
-
       <div className="flex gap-4 mt-5 ">
         <p> Don't Have an Account?</p>
         <Link to={"/sign-up"}>
